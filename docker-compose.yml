@@ -1,0 +1,32 @@
+version: "3"
+
+volumes:
+  data:
+
+services:
+  web:
+    build: .
+    volumes:
+      - .:/rails-dev
+    ports:
+      - "3000:3000"
+    tty: true
+    stdin_open: true
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    depends_on:
+      - db
+    links:
+      - db
+
+  db:
+    image: mysql:8.0
+    platform: linux/x86_64
+    volumes: 
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+    ports:
+      - "3306:3306"
