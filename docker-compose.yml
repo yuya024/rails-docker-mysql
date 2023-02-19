@@ -30,3 +30,11 @@ services:
       MYSQL_PASSWORD: $MYSQL_PASSWORD
     env_file:
       - .env
+
+  webpacker:
+    build: .
+    command: bundle exec bin/webpack-dev-server
+    volumes:
+      - .:/favorite_spot
+    ports:
+      - "8000:8000"
